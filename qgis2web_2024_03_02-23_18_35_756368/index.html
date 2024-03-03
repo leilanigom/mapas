@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/AlcaldasCDMX_1.js"></script>
+        <script src="data/Carpetasporcada15km2_2.js"></script>
+        <script src="data/Carpetasacososexual_3.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[18.848527288924718,-99.86823704222758],[19.76462398272924,-98.19847952980466]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Mapabase_0');
+        map.getPane('pane_Mapabase_0').style.zIndex = 400;
+        var layer_Mapabase_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            pane: 'pane_Mapabase_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Mapabase_0;
+        map.addLayer(layer_Mapabase_0);
+        function pop_AlcaldasCDMX_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">NOMBRE</th>\
+                        <td>' + (feature.properties['NOMBRE'] !== null ? autolinker.link(feature.properties['NOMBRE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_AlcaldasCDMX_1_0() {
+            return {
+                pane: 'pane_AlcaldasCDMX_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(183,72,75,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AlcaldasCDMX_1');
+        map.getPane('pane_AlcaldasCDMX_1').style.zIndex = 401;
+        map.getPane('pane_AlcaldasCDMX_1').style['mix-blend-mode'] = 'normal';
+        var layer_AlcaldasCDMX_1 = new L.geoJson(json_AlcaldasCDMX_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AlcaldasCDMX_1',
+            layerName: 'layer_AlcaldasCDMX_1',
+            pane: 'pane_AlcaldasCDMX_1',
+            onEachFeature: pop_AlcaldasCDMX_1,
+            style: style_AlcaldasCDMX_1_0,
+        });
+        bounds_group.addLayer(layer_AlcaldasCDMX_1);
+        map.addLayer(layer_AlcaldasCDMX_1);
+        function pop_Carpetasporcada15km2_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">carpetas</th>\
+                        <td>' + (feature.properties['carpetas'] !== null ? autolinker.link(feature.properties['carpetas'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Carpetasporcada15km2_2_0(feature) {
+            if (feature.properties['carpetas'] >= 1.000000 && feature.properties['carpetas'] <= 2.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,251,253,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['carpetas'] >= 2.000000 && feature.properties['carpetas'] <= 4.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(201,202,227,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['carpetas'] >= 4.000000 && feature.properties['carpetas'] <= 10.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,118,182,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['carpetas'] >= 10.000000 && feature.properties['carpetas'] <= 20.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(63,0,125,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Carpetasporcada15km2_2');
+        map.getPane('pane_Carpetasporcada15km2_2').style.zIndex = 402;
+        map.getPane('pane_Carpetasporcada15km2_2').style['mix-blend-mode'] = 'normal';
+        var layer_Carpetasporcada15km2_2 = new L.geoJson(json_Carpetasporcada15km2_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Carpetasporcada15km2_2',
+            layerName: 'layer_Carpetasporcada15km2_2',
+            pane: 'pane_Carpetasporcada15km2_2',
+            onEachFeature: pop_Carpetasporcada15km2_2,
+            style: style_Carpetasporcada15km2_2_0,
+        });
+        bounds_group.addLayer(layer_Carpetasporcada15km2_2);
+        function pop_Carpetasacososexual_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fecha_hech</th>\
+                        <td>' + (feature.properties['fecha_hech'] !== null ? autolinker.link(feature.properties['fecha_hech'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">hora_hecho</th>\
+                        <td>' + (feature.properties['hora_hecho'] !== null ? autolinker.link(feature.properties['hora_hecho'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">delito</th>\
+                        <td>' + (feature.properties['delito'] !== null ? autolinker.link(feature.properties['delito'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="colonia_ca"colspan="2"><strong>colonia_ca</strong><br />' + (feature.properties['colonia_ca'] !== null ? autolinker.link(feature.properties['colonia_ca'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Carpetasacososexual_3_0() {
+            return {
+                pane: 'pane_Carpetasacososexual_3',
+                radius: 2.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(120,75,188,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Carpetasacososexual_3');
+        map.getPane('pane_Carpetasacososexual_3').style.zIndex = 403;
+        map.getPane('pane_Carpetasacososexual_3').style['mix-blend-mode'] = 'normal';
+        var layer_Carpetasacososexual_3 = new L.geoJson(json_Carpetasacososexual_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Carpetasacososexual_3',
+            layerName: 'layer_Carpetasacososexual_3',
+            pane: 'pane_Carpetasacososexual_3',
+            onEachFeature: pop_Carpetasacososexual_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Carpetasacososexual_3_0(feature));
+            },
+        });
+        var cluster_Carpetasacososexual_3 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Carpetasacososexual_3.addLayer(layer_Carpetasacososexual_3);
+
+        bounds_group.addLayer(layer_Carpetasacososexual_3);
+        cluster_Carpetasacososexual_3.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Carpetasacososexual_3.png" /> Carpetas acoso sexual': cluster_Carpetasacososexual_3,'Carpetas por cada 1.5 km2<br /><table><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_120.png" /></td><td>1 - 2</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_241.png" /></td><td>2 - 4</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_4102.png" /></td><td>4 - 10</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_10203.png" /></td><td>10 - 20</td></tr></table>': layer_Carpetasporcada15km2_2,'<img src="legend/AlcaldasCDMX_1.png" /> Alcaldías CDMX': layer_AlcaldasCDMX_1,"Mapa base": layer_Mapabase_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
